@@ -6,6 +6,8 @@ server:
       name: SS0_SESSIONID
 
 spring:
+  application:
+    name: demo
   thymeleaf:
     mode: HTML
     encoding: UTF-8
@@ -92,4 +94,37 @@ logging:
   level:
     #控制单个包下日志输出级别
     org.thymeleaf: info
+
+#熔断机制
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds:  60000
+
+#注册中心
+eureka:
+  client:
+    service-url:
+      defaultZone: http://10.48.1.253:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    #instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true
+    lease-expiration-duration-in-seconds: 10
+    lease-renewal-interval-in-seconds: 5
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 500000
+        readTimeout: 500000
+  hystrix:
+    enabled: true
+  httpclient:
+    enabled: true
 
